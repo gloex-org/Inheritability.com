@@ -45,4 +45,57 @@
             background:#002244;
             color:white;
             padding:40px 20px;
-            margin-top:50px
+            margin-top:50px;
+            text-align:center;
+        }
+        footer a { color:#7cc2ff; margin:0 10px; text-decoration:none; }
+        footer img { height:55px; }
+
+        /* SECTIONS */
+        .section {
+            background:white;
+            width:92%;
+            margin:20px auto;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 0 9px #0002;
+        }
+        .section-title {
+            font-size:28px;
+            color:#004aad;
+            font-weight:bold;
+            margin-bottom:10px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div id="header-container"></div>
+
+<main id="content">
+    <!-- index.html loads section content here -->
+</main>
+
+<div id="footer-container"></div>
+
+<!-- INLINE JS -->
+<script>
+    // Load header + footer templates
+    document.addEventListener("DOMContentLoaded", () => {
+        include("header.html", "header-container");
+        include("footer.html", "footer-container");
+    });
+
+    function include(file, elementId) {
+        fetch(file)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById(elementId).innerHTML = data;
+            });
+    }
+</script>
+
+</body>
+</html>
