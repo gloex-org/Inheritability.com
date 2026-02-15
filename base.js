@@ -3,8 +3,8 @@ const API_BASE = "https://inheritabity.pythonanywhere.com/api/content/";
 
 async function init() {
     // 1. Load HTML Partials
-    document.querySelector('header').innerHTML = await (await fetch('components/header.html')).text();
-    document.querySelector('footer').innerHTML = await (await fetch('components/footer.html')).text();
+    document.querySelector('header').innerHTML = await (await fetch('header.html')).text();
+    document.querySelector('footer').innerHTML = await (await fetch('footer.html')).text();
 
     // 2. Fetch Data
     const response = await fetch(API_BASE);
