@@ -3,58 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inheritability.com - Legacy & Estate Planning Platform</title>
+    <title>Inheritability.com | Professional Estate & Legacy Platform</title>
     
-    <meta name="description" content="The definitive platform for inheritance technology, estate planning directories, and legal compliance updates.">
-    <meta name="keywords" content="Inheritance, Estate Law, Digital Assets, Wills, Probate">
-    <meta name="author" content="Inheritability.com">
-    <link rel="canonical" href="https://inheritability.com">
+    <meta name="description" content="Inheritability.com provides high-level directory services, updates, and compliance for estate planning and legacy management.">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/png" href="inheritability.png">
 
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="assets/inheritability.png">
+    <style>
+        :root {
+            --primary: #1a237e; /* Deep Navy */
+            --accent: #c2185b;  /* Professional Magenta */
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--bg); color: var(--text); line-height: 1.6; }
+        
+        /* Fixed Modern Header */
+        header { position: fixed; top: 0; width: 100%; height: 70px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; box-sizing: border-box; }
+        
+        .main-container { margin-top: 90px; padding: 0 5% 50px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+
+        /* Section 1: Directory Buttons */
+        .directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin: 30px 0; }
+        .dir-btn { background: #fff; border: 2px solid var(--primary); color: var(--primary); padding: 12px; text-align: center; border-radius: 8px; font-weight: bold; text-decoration: none; transition: 0.3s; }
+        .dir-btn:hover { background: var(--primary); color: #fff; transform: translateY(-3px); }
+
+        /* Section 2: Hello Section */
+        #hello-section { padding: 50px; border-radius: 15px; text-align: center; margin-bottom: 40px; }
+        .category-tag { display: inline-block; background: rgba(0,0,0,0.1); padding: 5px 15px; border-radius: 20px; margin: 5px; font-size: 0.9rem; }
+
+        /* Section 4: Marketing Banners */
+        .banner-slider { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 20px; scroll-snap-type: x mandatory; }
+        .banner-card { min-width: 300px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); scroll-snap-align: start; }
+        .banner-card img { width: 100%; height: 180px; object-fit: cover; }
+
+        /* Section 5: Updates */
+        .update-card { background: #fff; padding: 25px; margin-bottom: 30px; border-radius: 10px; border-left: 5px solid var(--accent); }
+        .update-card h2 { margin-top: 0; color: var(--primary); }
+
+        footer { background: var(--primary); color: #fff; padding: 50px 5%; margin-top: 50px; }
+        
+        /* Utility */
+        .contact-fixed-btn { background: var(--accent); color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+        @media (max-width: 768px) { .header-title { display: none; } }
+    </style>
 </head>
 <body>
 
-    <header></header>
+    <header id="header-inject"></header>
 
-    <main>
-        <section class="section" id="section-directory">
-            <h2>Quick Directory</h2>
-            <div id="dir-container" class="dir-grid"></div>
+    <div class="main-container">
+        <section id="directory">
+            <h2 id="dir-title">Platform Directory</h2>
+            <div id="directory-grid" class="directory-grid"></div>
         </section>
 
-        <section class="section">
-            <div id="intro-section" class="intro-box">Loading...</div>
-            <div id="cat-container" class="cat-list"></div>
+        <section id="hello-section">
+            <h1 id="intro-title">Loading...</h1>
+            <p id="intro-subtitle"></p>
+            <div id="category-container"></div>
         </section>
 
-        <section class="section" style="background: #f9f9f9;">
-            <h2>Featured Content</h2>
-            <div id="featured-container"></div>
+        <section id="marketing">
+            <h2>Featured Partners</h2>
+            <div id="banner-container" class="banner-slider"></div>
         </section>
 
-        <section class="section">
-            <h2>Partners</h2>
-            <div id="banner-container" class="banner-wrapper"></div>
-        </section>
-
-        <section class="section" id="section-updates">
-            <h2>Latest Updates</h2>
+        <section id="updates">
+            <h2>Recent Updates & Posts</h2>
             <div id="updates-container"></div>
         </section>
 
-        <section class="section">
-            <h2>References</h2>
-            <div id="ref-container" style="display:flex; gap:20px; flex-wrap:wrap;"></div>
+        <section id="compliance" style="font-size: 0.8rem; opacity: 0.8; padding-top: 50px;">
+            <div id="compliance-content"></div>
+            <div id="reference-links" style="margin-top: 20px;"></div>
         </section>
+    </div>
 
-        <section class="section" id="compliance">
-            <div id="compliance-box" style="font-size:0.9rem; color:#555;"></div>
-        </section>
-    </main>
+    <footer id="footer-inject"></footer>
 
-    <footer id="contact"></footer>
+    <script>
+        const API_URL = "https://inheritability.pythonanywhere.com/api/content/";
 
-    <script src="base.js"></script>
+        async function loadPlatform() {
+            try {
+                // 1. Fetch Header & Footer (as requested in same directory)
+                const headerHtml = await fetch('header.html').then(r => r.text());
+                const footerHtml = await fetch('footer.html').then(r => r.text());
+                document.getElementById('header-inject').innerHTML = headerHtml;
+                document.getElementById('footer-inject').innerHTML = footerHtml;
+
+                // 2. Fetch API Data
+                const response = await fetch(API_URL);
+                const data = await response.json();
+
+                // 3. Populate Intro (Section 2)
+                const intro = data.intro;
+                if(intro) {
+                    const el = document.getElementById('hello-section');
+                    el.style.backgroundColor = intro.bg_color;
+                    document.getElementById('intro-title').innerText = intro.title;
+                    document.getElementById('intro-title').style.color = intro.text_color;
+                    document.getElementById('intro-subtitle').innerText = intro.subtitle;
+                    document.getElementById('intro-subtitle').style.color = intro.text_color;
+                }
+
+                // 4. Populate Directory (Section 1)
+                const dirGrid = document.getElementById('directory-grid');
+                data.directory.forEach(item => {
+                    dirGrid.innerHTML += `<a href="#post-${item.id}" class="dir-btn">${item.title}</a>`;
+                });
+
+                // 5. Populate Banners (Section 4)
+                const bannerCont = document.getElementById('banner-container');
+                data.banners.forEach(b => {
+                    bannerCont.innerHTML += `
+                        <div class="banner-card">
+                            <a href="${b.target_link}">
+                                <img src="${b.image_url}" alt="${b.name}">
+                                <div style="padding:10px;"><strong>${b.name}</strong></div>
+                            </a>
+                        </div>`;
+                });
+
+                // 6. Populate Updates (Section 5)
+                const updateCont = document.getElementById('updates-container');
+                data.updates.forEach(p => {
+                    updateCont.innerHTML += `
+                        <article id="post-${p.id}" class="update-card" style="${p.highlight_color ? `background:${p.highlight_color}` : ''}">
+                            <h2 style="${p.is_bold ? 'font-weight:900' : ''}">${p.title}</h2>
+                            <div>${p.content}</div>
+                        </article>`;
+                });
+
+            } catch (err) {
+                console.error("Data Fetch Error:", err);
+            }
+        }
+
+        window.onload = loadPlatform;
+    </script>
 </body>
-      </html>
+</html>
